@@ -573,6 +573,9 @@ $("#foodListPage").on("click", "#addFood", function(e){
 /***** EDIT FOOD PAGE *****/
 function addFoodFormAction()
 {
+  //make macros editable until a scan was successful
+  enableMacroFields();
+
   //Get form values
   var id = parseInt($("#editFoodForm #foodId").val()); //ID is hidden field
   var date = new Date()
@@ -618,6 +621,23 @@ function populateEditFoodForm(data)
   }
 }
 
+//disable the macro input fields, if the bar code scan was successful
+function disableMacroFields()
+{
+    document.getElementById("foodCalories").disabled = true;
+    document.getElementById("foodCarbs").disabled = true;
+    document.getElementById("foodProtein").disabled = true;
+    document.getElementById("foodFat").disabled = true;
+}
+
+function enableMacroFields()
+{
+    document.getElementById("foodCalories").disabled = false;
+    document.getElementById("foodCarbs").disabled = false;
+    document.getElementById("foodProtein").disabled = false;
+    document.getElementById("foodFat").disabled = false;
+}
+
 //For scanning barcodes
 function scan()
 {
@@ -633,6 +653,7 @@ function scan()
        request.onreadystatechange = function(){
          processBarcodeResponse(request);
        };
+
      },
      function (e) {
          alert("Scanning failed: " + error);
@@ -643,8 +664,8 @@ function scan()
 //For testing the barcode scanner manually
 function testscan()
 {
-  var code = "3366321051983";
-  //var code = "4388840216314";   //Ja! Magerquark
+//  var code = "3366321051983";
+  var code = "4388840216314";   //Ja! Magerquark
 
 
   var request = new XMLHttpRequest();
@@ -727,6 +748,7 @@ function processBarcodeResponse(request)
           escape(data.portion);
 
           populateEditFoodForm(data);
+          disableMacroFields();
         }
       }
     }
