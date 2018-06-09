@@ -597,6 +597,10 @@ function populateEditFoodForm(data)
   //Populate the edit form with passed data
   $('#editFoodForm #foodId').val(data.id);
   $('#editFoodForm #foodCalories').val(data.calories);
+  $('#editFoodForm #foodCarbs').val(data.carbohydrates);
+  $('#editFoodForm #foodFat').val(data.fat);
+  $('#editFoodForm #foodProtein').val(data.protein);
+
   $('#editFoodForm #barcode').val(data.barcode);
   if (app.storage.getItem("scanImages") == "true") {$('#editFoodPage #foodImage img').attr("src", data.image_url);}
 
@@ -640,6 +644,8 @@ function scan()
 function testscan()
 {
   var code = "3366321051983";
+  //var code = "4388840216314";   //Ja! Magerquark
+
 
   var request = new XMLHttpRequest();
 
@@ -679,13 +685,29 @@ function processBarcodeResponse(request)
           //Get the data for the add food form
           var product = result.product;
 
-          var data = {"name":escape(product.product_name), "quantity":1, "calories":parseInt(product.nutriments.energy_value), "image_url":product.image_url, "barcode":result.code};
+          var data = {"name":escape(product.product_name), "quantity":1,
+            "calories":parseInt(product.nutriments.energy_value),
+            "protein":parseInt(product.nutriments.proteins),
+            "carbohydrates":parseInt(product.nutriments.carbohydrates),
+            "fat":parseInt(product.nutriments.fat), "image_url":product.image_url,
+            "barcode":result.code};
+
 
           //Get best match for portion/serving size
           if (product.serving_size)
           {
             data.portion = product.serving_size.replace(/\s+/g, ''); //Remove white space
-            data.calories = parseInt(parseFloat(product.nutriments.energy_value) / 100 * parseFloat(product.serving_size)); //Get calories for portion
+
+            //Get calories for portion
+            data.calories = parseInt(parseFloat(
+                product.nutriments.energy_value) / 100 * parseFloat(product.serving_size));
+            data.protein = parseInt(parseFloat(
+                product.nutriments.proteins) / 100 * parseFloat(product.serving_size));
+            data.carbohydrates = parseInt(parseFloat(
+                product.nutriments.carbohydrates) / 100 * parseFloat(product.serving_size));
+            data.fat = parseInt(parseFloat(
+                product.nutriments.fat) / 100 * parseFloat(product.serving_size));
+
           }
           else if (product.nutrition_data_per)
           {

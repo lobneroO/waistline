@@ -1,5 +1,8 @@
 var defaultLocale = {
   "calories": "Calories",
+  "protein": "Protein",
+  "carbohydrates": "Carbohydrates",
+  "fat": "Fat",
   "goal":"Goal",
   "used":"Used",
   "remaining":"Remaining",

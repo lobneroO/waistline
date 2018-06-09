@@ -216,6 +216,15 @@
             <label for="foodCalories" data-localize="calories"><script>document.write(defaultLocale["calories"]);</script></label>
             <input type="number" pattern="[0-9]*" name="foodCalories" id="foodCalories" required="true">
 
+            <!--Macros-->
+            <label for="foodProtein" data-localize="protein"><script>document.write(defaultLocale["protein"]);</script></label>
+            <input type="number" pattern="[0-9]*" name="foodProtein" id="foodProtein" required="false">
+            <label for="foodCarbs" data-localize="carbohydrates"><script>document.write(defaultLocale["carbohydrates"]);</script></label>
+            <input type="number" pattern="[0-9]*" name="foodCarbs" id="foodCarbs" required="false">
+            <label for="foodFat" data-localize="foodFat"><script>document.write(defaultLocale["fat"]);</script></label>
+            <input type="number" pattern="[0-9]*" name="foodFat" id="foodFat" required="false">
+
+
             <button type="submit" name="saveFood" data-localize="save"><script>document.write(defaultLocale["save"]);</script></button>
           </form>
           <div id="foodImage"><img></img></div>
