@@ -2,4 +2,10 @@ deliverables/
 images/
 platforms/android/app/build/
 platforms/android/.gradle/
+platforms/android/CordovaLib/build/
 .idea/vcs.xml
+platforms/android/app/app.iml
+platforms/android/android.iml
+platforms/android/CordovaLib/CordovaLib.iml
+platforms/android/.idea/workspace.xml
+platforms/android/.idea/caches/build_file_checksums.ser
