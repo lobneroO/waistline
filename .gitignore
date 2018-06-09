@@ -1,4 +1,5 @@
 deliverables/
 images/
-platforms/android/
+platforms/android/app/build/
+platforms/android/.gradle/
 .idea/vcs.xml
