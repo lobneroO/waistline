@@ -60,6 +60,8 @@ var dbHandler =
         if (!store.indexNames.contains("calorieGoal")) store.createIndex('calorieGoal', 'calorieGoal', {unique:false}); //Target calories for the day
         if (!store.indexNames.contains("caloriesLeft")) store.createIndex('caloriesLeft', 'caloriesLeft', {unique:false}); //Calories remaining - calorieGoal-calories
         if (!store.indexNames.contains("weight")) store.createIndex('weight', 'weight', {unique:false}); //Current weight
+        //macros
+        if (!store.indexNames.contains("protein")) store.createIndex('protein', 'protein', {unique:false}); //protein consumed for the date
 
         //Food list store
         if (!DB.objectStoreNames.contains("foodList")) {
@@ -74,6 +76,8 @@ var dbHandler =
         if (!store.indexNames.contains("quantity")) store.createIndex('quantity', 'quantity', {unique:false}); //Default quantity
         if (!store.indexNames.contains("calories")) store.createIndex('calories', 'calories', {unique:false}); //Calories in portion
         if (!store.indexNames.contains("barcode")) store.createIndex('barcode', 'barcode', {unique:false}); //Calories in portion
+        //macros
+        if (!store.indexNames.contains("protein")) store.createIndex('protein', 'protein', {unique:false}); //protein in portion
 
         //Diary Store - a kind of mini food list, independent of the main food list
         if (!DB.objectStoreNames.contains("diary")) {
@@ -89,6 +93,8 @@ var dbHandler =
         if (!store.indexNames.contains("calories")) store.createIndex('calories', 'calories', {unique:false}); //Calories in the portion
         if (!store.indexNames.contains("category")) store.createIndex('category', 'category', {unique:false}); //Breakfast, lunch dinner, etc..
         if (!store.indexNames.contains("foodId")) store.createIndex('foodId', 'foodId', {unique:false}); //ID of food in food object store - useful for some stuff
+        //macros
+        if (!store.indexNames.contains("protein")) store.createIndex('protein', 'protein', {unique:false}); //protein in the portion
 
         console.log("DB Created/Updated");
     };
