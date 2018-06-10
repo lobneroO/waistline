@@ -314,13 +314,97 @@ function populateDiary()
 //Macros page
 function populateMacros()
 {
+    console.log("Entered populateMacros method");
   //Get selected date (app.date) at midnight
   var fromDate = getDateAtMidnight(app.date);
 
-  //Get day after selected date at midnight
+//  //Get day after selected date at midnight
   var toDate = new Date(fromDate);
   toDate.setDate(toDate.getDate()+1);
 
+   //Pull record from the database for the selected date and add items to the list
+   //TODO: this should probably have a macros entry instead of being stored as the diary entry
+    var index = dbHandler.getIndex("dateTime", "diary"); //Get date index from diary store
+//    var calorieGoal = app.storage.getItem("calorieGoal");
+    var htmlProtein = "", htmlCarbs = "", htmlFat = "";
+
+  //Strings of html for each category - prepopulated with category dividers
+    var list = {
+      protein:"<li class='diaryDivider' id='Protein' data-role='list-divider'><i>"+app.strings['protein']+"</i><span></span></li>",
+      carbohydrates:"<li class='diaryDivider' id='Carboyhydrates' data-role='list-divider'><i>"+app.strings['carbohydrates']+"</i><span></span></li>",
+      fat:"<li class='diaryDivider' id='Fat' data-role='list-divider'><i>"+app.strings['fat']+"</i><span></span></li>",
+    };
+
+  var macrosCount = {"protein":0, "carbohydrates":0, "fat":0}; //Macros split into their respective categories
+
+
+    index.openCursor(IDBKeyRange.bound(fromDate, toDate)).onsuccess = function(e)
+    {
+
+      var cursor = e.target.result;
+      if (cursor)
+      {
+        var protein = cursor.value.protein;
+        console.log("protein created in populateMacros method");
+
+        if (typeof yourvar !== 'undefined')
+        {
+            if (yourvar !== undefined)
+            {
+                console.log("protein = " + protein);
+            }
+            else
+            {
+                console.log("protein content is undefined!");
+            }
+        }
+        else
+        {
+            console.log("protein variable is undefined!");
+            cursor.continue();
+        }
+//        var carbohydrates = cursor.value.carbohydrates;
+//        var fat = cursor.value.fat;
+//
+//        //Build HTML
+//        htmlProtein = ""; //Reset variable
+//        htmlCarbs = ""; //Reset variable
+//        htmlFat = ""; //Reset variable
+//
+//        htmlProtein += "<li class='macrosItem' id='"+cursor.value.id+"' category='"+cursor.value.category+"'>";
+//        htmlProtein += "<a data-details='"+JSON.stringify(cursor.value)+"'>"+unescape(cursor.value.name) + " - " + unescape(cursor.value.portion);
+//
+//        //1. protein
+//        if (cursor.value.quantity == 1)
+//        {
+//          htmlProtein += "<p>"+cursor.value.quantity + " " + app.strings['serving'] + ", " +
+//          Math.round(cursor.value.quantity * cursor.value.protein) + " " +
+//          app.strings['protein'] + "</p>";
+//        }
+//        else
+//        {
+//          htmlProtein += "<p>"+cursor.value.quantity + " " + app.strings['servings'] + ", " +
+//          Math.round(cursor.value.quantity * cursor.value.protein) + " " +
+//          app.strings['protein'] + "</p>";
+//        }
+//        htmlProtein += "</a>";
+//        htmlProtein += "</li>";
+//
+//        list.protein += htmlProtein;
+//        macrosCount.protein += Math.round(cursor.value.protein * cursor.value.quantity);
+//
+//        cursor.continue();
+      }
+      else
+      {
+////        $("#macrosListview").html(list.breakfast + list.lunch + list.dinner + list.snacks); //Insert into HTML
+//        $("#macrosListview #Protein span").html(" - " + macrosCount.protein + " " + app.strings['protein']);
+////        $("#macrosListview #Lunch span").html(" - " + calorieCount.lunch + " " + app.strings['calories']);
+////        $("#macrosListview #Dinner span").html(" - " + calorieCount.dinner + " " + app.strings['calories']);
+////        $("#macrosListview #Snacks span").html(" - " + calorieCount.snacks + " " + app.strings['calories']);
+//        $("#macrosListview").listview("refresh");
+      }
+    };
 }
 
 $("#macrosPage #macroDate").on("click", function(e){
