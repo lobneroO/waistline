@@ -94,7 +94,7 @@
           <a href="index.html" class="ui-btn ui-icon-arrow-l ui-btn-icon-notext ui-corner-all ui-nodisc-icon"></a>
           <!--<a href="index.html"></a>-->
           <h1 data-localize="diary"><script>document.write(defaultLocale["diary"]);</script></h1>
-          <a href="index.html" data-role="button" class="ui-btn-right ui-corner-all ui-nodisc-icon">Macros</a>
+          <a href="#macrosPage" data-role="button" class="ui-btn-right ui-corner-all ui-nodisc-icon">Macros</a>
         </div>
         <div data-role="main" class="ui-content">
           <div id="diaryDate"></div>
@@ -120,6 +120,16 @@
             <a data-role="button" id="cancel" data-rel="back" data-localize="cancel"><script>document.write(defaultLocale["cancel"]);</script></a>
             <button data-role="button" data-localize="delete"><script>document.write(defaultLocale["delete"]);</script></button>
           </div>
+        </div>
+      </div>
+
+      <div data-role="page" id="macrosPage">
+        <div data-role="header">
+          <a data-rel="back" class="ui-btn ui-icon-arrow-l ui-btn-icon-notext ui-corner-all ui-nodisc-icon"></a>
+          <h1 data-localize="diary-edit-title"><script>document.write(defaultLocale["macro-title"]);</script></h1>
+        </div>
+        <div data-role="main" class="ui-content">
+          The macros
         </div>
       </div>
 

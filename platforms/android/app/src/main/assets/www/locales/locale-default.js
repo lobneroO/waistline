@@ -19,6 +19,7 @@ var defaultLocale = {
   "snacks": "Snacks",
   "serving": "Serving",
   "servings": "Servings",
+  "macro-title": "Macros",
   "diary-edit-title": "Edit Diary Entry",
   "num-servings": "Number of Servings",
   "category": "Category",
