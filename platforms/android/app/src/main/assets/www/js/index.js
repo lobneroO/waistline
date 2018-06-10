@@ -130,6 +130,7 @@ function changeDate(date)
   app.date = new Date(date);
 
   $("#diaryDate").html("<h4>"+app.date.toDateString()+"</h4>"); //Update date display
+  $("#macroDate").html("<h4>"+app.date.toDateString()+"</h4>"); //Update date display
 
   //Update the app.caloriesConsumed variable for the new date
   var date = getDateAtMidnight(app.date);
@@ -309,6 +310,43 @@ function populateDiary()
     }
   };
 }
+
+//Macros page
+function populateMacros()
+{
+  //Get selected date (app.date) at midnight
+  var fromDate = getDateAtMidnight(app.date);
+
+  //Get day after selected date at midnight
+  var toDate = new Date(fromDate);
+  toDate.setDate(toDate.getDate()+1);
+
+}
+
+$("#macrosPage #macroDate").on("click", function(e){
+  var date = new Date();
+  changeDate(date);
+  populateMacros();
+});
+
+$("#macrosPage").on("pageshow", function(e){
+  console.log("Macros Page");
+  populateMacros();
+});
+
+//Bind on swipeleft to macrosPage
+$("#macrosPage").on("swipeleft", function(e){
+  app.date.setDate(app.date.getDate()+1);
+  changeDate(app.date);
+  populateMacros();
+});
+
+//Bind on swiperight to macrosPage page
+$("#macrosPage").on("swiperight", function(e){
+  app.date.setDate(app.date.getDate()-1);
+  changeDate(app.date);
+  populateMacros();
+});
 
 //When the date on the diary page is clicked, go to the current date
 $("#diaryPage #diaryDate").on("click", function(e){
