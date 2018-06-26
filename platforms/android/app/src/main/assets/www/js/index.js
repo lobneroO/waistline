@@ -416,6 +416,7 @@ $("#macrosPage #macroDate").on("click", function(e){
 $("#macrosPage").on("pageshow", function(e){
   console.log("Macros Page");
   populateMacros();
+  console.log("After populateMacros method");
 });
 
 //Bind on swipeleft to macrosPage
@@ -510,9 +511,11 @@ $("#diaryListview").on("click", ".diaryItem a", function(e){
 //Bind to quanity box on diaryItemEditForm
 $("#editDiaryItemForm #quantity").on("change paste keyup", function(e){
   var calories = $("#editDiaryItemForm #calories").val(); //Pull calories from hidden field
+  var protein = $("#editDiaryItemPage #protein").val();
   var quantity = $("#editDiaryItemForm #quantity").val();
 
   $("#editDiaryItemPage #caloriesDisplay").text(Math.round(calories * quantity)); //Update calories display
+  $("#editDiaryItemPage #proteinDisplay").text(Math.round(protein * quantity)); //Update calories display
 });
 
 function editDiaryItemFormAction()
@@ -570,6 +573,7 @@ $("#foodListPage").on("pageshow", function(event, ui)
       html += "<li class='foodListItem' id='"+cursor.value.id+"'>"; //Add class and ID
       html += "<a class='addToDiary' data-details='"+ JSON.stringify(cursor.value) +"'>"+unescape(cursor.value.name) + " - " + unescape(cursor.value.portion);
       html += "<p>" + Math.round(cursor.value.calories) + " " + app.strings["calories"] + "</p>";
+      html += "<p>" + Math.round(cursor.value.protein) + " " + app.strings["protein"] + "</p>";
       html += "</a>";
       html += "<a class='editFood' data-details='"+ JSON.stringify(cursor.value) +"'></a>";
       html += "</li>";
@@ -597,9 +601,10 @@ $("#foodListview").on("click", ".addToDiary", function(e){
   var dateTime = new Date(Date.UTC(app.date.getFullYear(), app.date.getMonth(), app.date.getDate(), app.date.getHours(), app.date.getMinutes(), app.date.getSeconds())); //JS dates are shit
   var foodId = details.id;
   var name = details.name;
-  var portion = details.portion;
+  var portion = parseFloat(details.portion);
   var quantity = parseFloat(details.quantity);
   var calories = parseFloat(details.calories);
+  var protein = parseFloat(details.protein);
   var category = $("#foodListPage #category").val(); //Hidden field
 
   //If no category is provided, determine it based on time of day
@@ -630,7 +635,8 @@ $("#foodListview").on("click", ".addToDiary", function(e){
     }
   }
 
-  var diaryData = {"dateTime":dateTime, "name":name, "portion":portion, "quantity":quantity, "calories":calories, "category":category, "foodId":foodId};
+  var diaryData = {"dateTime":dateTime, "name":name, "portion":portion, "quantity":quantity,
+    "calories":calories, "category":category, "foodId":foodId, "protein":protein};
   var request = dbHandler.insert(diaryData, "diary"); //Add item to diary
 
   request.onsuccess = function(e)
@@ -644,7 +650,7 @@ $("#foodListview").on("click", ".addToDiary", function(e){
     updateProgress();
 
     //Update food item's dateTime (to show when food was last referenced)
-    var foodData = {"id":foodId, "dateTime":new Date(), "name":name, "portion":portion, "quantity":quantity, "calories":calories};
+    var foodData = {"id":foodId, "dateTime":new Date(), "name":name, "portion":portion, "quantity":quantity, "calories":calories, "protein":protein};
     dbHandler.insert(foodData, "foodList");
 
     //Reset category field
@@ -706,9 +712,10 @@ function addFoodFormAction()
   var portion = escape($('#editFoodPage #foodPortion').val());
   var quantity = 1;
   var calories = parseFloat($('#editFoodPage #foodCalories').val());
+  var protein = parseFloat($('#editFoodPage #foodProtein').val());
   var barcode = $("#editFoodForm #barcode").val(); //Barcode is hidden field
 
-  var data = {"dateTime":dateTime, "name":name, "portion":portion, "quantity":quantity, "calories":calories, "barcode":barcode};
+  var data = {"dateTime":dateTime, "name":name, "portion":portion, "quantity":quantity, "calories":calories, "protein":protein, "barcode":barcode};
 
   if (isNaN(id) == false) {data.id = id}; //Add ID for existing items
 
