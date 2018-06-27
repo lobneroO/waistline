@@ -339,10 +339,10 @@ function populateMacros()
         var cursor = e.target.result;
         if (cursor)
         {
-            proteinTotal += cursor.value.protein;
-            fatTotal += cursor.value.fat;
-            carbsTotal += cursor.value.carbohydrates;
-
+            var quantity = cursor.value.quantity;
+            proteinTotal += cursor.value.protein * quantity;
+            fatTotal += cursor.value.fat * quantity;
+            carbsTotal += cursor.value.carbohydrates * quantity;
 
             cursor.continue();
         }
