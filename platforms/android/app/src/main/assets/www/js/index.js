@@ -348,15 +348,15 @@ function populateMacros()
         }
         else
         {
-            htmlProtein += app.strings["protein"] + ": " + Math.round(proteinTotal) + "g";
+            htmlProtein += app.strings["protein"] + ": " + roundToSecondDecimal(proteinTotal) + "g";
             var liProtein = document.createElement("li");
             liProtein.appendChild(document.createTextNode(htmlProtein));
 
-            htmlFat += app.strings["fat"] + ": " + Math.round(fatTotal) + "g";
+            htmlFat += app.strings["fat"] + ": " + roundToSecondDecimal(fatTotal) + "g";
             var liFat = document.createElement("li");
             liFat.appendChild(document.createTextNode(htmlFat));
 
-            htmlCarbs += app.strings["carbohydrates"] + ": " + Math.round(carbsTotal) + "g";
+            htmlCarbs += app.strings["carbohydrates"] + ": " + roundToSecondDecimal(carbsTotal) + "g";
             var liCarbs = document.createElement("li");
             liCarbs.appendChild(document.createTextNode(htmlCarbs));
 
@@ -475,9 +475,9 @@ $("#editDiaryItemForm #quantity").on("change paste keyup", function(e){
   var quantity = $("#editDiaryItemForm #quantity").val();
 
   $("#editDiaryItemPage #caloriesDisplay").text(Math.round(calories * quantity)); //Update calories display
-  $("#editDiaryItemPage #proteinDisplay").text(Math.round(protein * quantity)); //Update protein display
-  $("#editDiaryItemPage #fatDisplay").text(Math.round(fat * quantity)); //Update protein display
-  $("#editDiaryItemPage #carbsDisplay").text(Math.round(carbohydrates * quantity)); //Update protein display
+  $("#editDiaryItemPage #proteinDisplay").text(roundToSecondDecimal(protein * quantity )); //Update protein display
+  $("#editDiaryItemPage #fatDisplay").text(roundToSecondDecimal(fat * quantity)); //Update protein display
+  $("#editDiaryItemPage #carbsDisplay").text(roundToSecondDecimal(carbohydrates * quantity)); //Update protein display
 });
 
 function editDiaryItemFormAction()
@@ -535,9 +535,9 @@ $("#foodListPage").on("pageshow", function(event, ui)
       html += "<li class='foodListItem' id='"+cursor.value.id+"'>"; //Add class and ID
       html += "<a class='addToDiary' data-details='"+ JSON.stringify(cursor.value) +"'>"+unescape(cursor.value.name) + " - " + unescape(cursor.value.portion);
       html += "<p>" + Math.round(cursor.value.calories) + " " + app.strings["calories"] + "</p>";
-      html += "<p>" + Math.round(cursor.value.protein) + " " + app.strings["protein"] + "</p>";
-      html += "<p>" + Math.round(cursor.value.fat) + " " + app.strings["fat"] + "</p>";
-      html += "<p>" + Math.round(cursor.value.carbohydrates) + " " + app.strings["carbohydrates"] + "</p>";
+      html += "<p>" + roundToSecondDecimal(cursor.value.protein) + " " + app.strings["protein"] + "</p>";
+      html += "<p>" + roundToSecondDecimal(cursor.value.fat) + " " + app.strings["fat"] + "</p>";
+      html += "<p>" + roundToSecondDecimal(cursor.value.carbohydrates) + " " + app.strings["carbohydrates"] + "</p>";
       html += "</a>";
       html += "<a class='editFood' data-details='"+ JSON.stringify(cursor.value) +"'></a>";
       html += "</li>";
@@ -879,4 +879,11 @@ function saveUserSettings()
   updateProgress();
 
   $(":mobile-pagecontainer").pagecontainer("change", "#home");
+}
+
+function roundToSecondDecimal(num)
+{
+    //see https://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-only-if-necessary
+    //answer by MarkG
+    return +(Math.round(num + "e+2")  + "e-2");
 }
