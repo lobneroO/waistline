@@ -235,11 +235,11 @@
 
             <!--Macros-->
             <label for="foodProtein" data-localize="protein"><script>document.write(defaultLocale["protein"]);</script></label>
-            <input type="number" pattern="[0-9]*" name="foodProtein" id="foodProtein" required="false">
+            <input type="number" step="any" name="foodProtein" id="foodProtein" required="true">
             <label for="foodCarbs" data-localize="carbohydrates"><script>document.write(defaultLocale["carbohydrates"]);</script></label>
-            <input type="number" pattern="[0-9]*" name="foodCarbs" id="foodCarbs" required="false">
+            <input type="number" step="any" name="foodCarbs" id="foodCarbs" required="true">
             <label for="foodFat" data-localize="foodFat"><script>document.write(defaultLocale["fat"]);</script></label>
-            <input type="number" pattern="[0-9]*" name="foodFat" id="foodFat" required="false">
+            <input type="number" step="any" name="foodFat" id="foodFat" required="true">
 
 
             <button type="submit" name="saveFood" data-localize="save"><script>document.write(defaultLocale["save"]);</script></button>
