@@ -317,12 +317,12 @@ function populateMacros()
     var ul = document.getElementById("macrosList");
 
     //declare all the necessary variables
-    var dates = [];
-    var weights = [];
-    var calories = [];
-    var protein = [];
     var proteinTotal = 0;
-    var html = "";
+    var fatTotal = 0;
+    var carbsTotal = 0;
+    var htmlProtein = "";
+    var htmlFat = "";
+    var htmlCarbs = "";
 
     //Get selected date (app.date) at midnight
     var fromDate = getDateAtMidnight(app.date);
@@ -339,26 +339,30 @@ function populateMacros()
         var cursor = e.target.result;
         if (cursor)
         {
-//            dates.push(cursor.value.dateTime.toLocaleDateString());
-//            weights.push(cursor.value.weight);
-            calories.push(cursor.value.calories);
-            protein.push(cursor.value.protein);
             proteinTotal += cursor.value.protein;
+            fatTotal += cursor.value.fat;
+            carbsTotal += cursor.value.carbohydrates;
 
-//            html += "<li>" + cursor.value.weight + " kg</li>";
-//            html += "<li>" + Math.round(cursor.value.calories) + " " + app.strings["calories"] + "</li>";
 
             cursor.continue();
         }
         else
         {
-            html += app.strings["protein"] + ": " + Math.round(proteinTotal) + "g";
-            var li = document.createElement("li");
-            li.appendChild(document.createTextNode(html));
-            if(li)
-            {
-                ul.appendChild(li);
-            }
+            htmlProtein += app.strings["protein"] + ": " + Math.round(proteinTotal) + "g";
+            var liProtein = document.createElement("li");
+            liProtein.appendChild(document.createTextNode(htmlProtein));
+
+            htmlFat += app.strings["fat"] + ": " + Math.round(fatTotal) + "g";
+            var liFat = document.createElement("li");
+            liFat.appendChild(document.createTextNode(htmlFat));
+
+            htmlCarbs += app.strings["carbohydrates"] + ": " + Math.round(carbsTotal) + "g";
+            var liCarbs = document.createElement("li");
+            liCarbs.appendChild(document.createTextNode(htmlCarbs));
+
+            ul.appendChild(liProtein);
+            ul.appendChild(liFat);
+            ul.appendChild(liCarbs);
         }
     }
 }
@@ -370,9 +374,7 @@ $("#macrosPage #macroDate").on("click", function(e){
 });
 
 $("#macrosPage").on("pageshow", function(e){
-  console.log("Macros Page");
   populateMacros();
-  console.log("After populateMacros method");
 });
 
 //Bind on swipeleft to macrosPage
@@ -468,10 +470,14 @@ $("#diaryListview").on("click", ".diaryItem a", function(e){
 $("#editDiaryItemForm #quantity").on("change paste keyup", function(e){
   var calories = $("#editDiaryItemForm #calories").val(); //Pull calories from hidden field
   var protein = $("#editDiaryItemPage #protein").val();
+  var fat = $("#editDiaryItemPage #fat").val();
+  var carbohydrates = $("#editDiaryItemPage #carbohydrates").val();
   var quantity = $("#editDiaryItemForm #quantity").val();
 
   $("#editDiaryItemPage #caloriesDisplay").text(Math.round(calories * quantity)); //Update calories display
-  $("#editDiaryItemPage #proteinDisplay").text(Math.round(protein * quantity)); //Update calories display
+  $("#editDiaryItemPage #proteinDisplay").text(Math.round(protein * quantity)); //Update protein display
+  $("#editDiaryItemPage #fatDisplay").text(Math.round(fat * quantity)); //Update protein display
+  $("#editDiaryItemPage #carbsDisplay").text(Math.round(carbohydrates * quantity)); //Update protein display
 });
 
 function editDiaryItemFormAction()
@@ -530,6 +536,8 @@ $("#foodListPage").on("pageshow", function(event, ui)
       html += "<a class='addToDiary' data-details='"+ JSON.stringify(cursor.value) +"'>"+unescape(cursor.value.name) + " - " + unescape(cursor.value.portion);
       html += "<p>" + Math.round(cursor.value.calories) + " " + app.strings["calories"] + "</p>";
       html += "<p>" + Math.round(cursor.value.protein) + " " + app.strings["protein"] + "</p>";
+      html += "<p>" + Math.round(cursor.value.fat) + " " + app.strings["fat"] + "</p>";
+      html += "<p>" + Math.round(cursor.value.carbohydrates) + " " + app.strings["carbohydrates"] + "</p>";
       html += "</a>";
       html += "<a class='editFood' data-details='"+ JSON.stringify(cursor.value) +"'></a>";
       html += "</li>";
@@ -561,6 +569,8 @@ $("#foodListview").on("click", ".addToDiary", function(e){
   var quantity = parseFloat(details.quantity);
   var calories = parseFloat(details.calories);
   var protein = parseFloat(details.protein);
+  var fat = parseFloat(details.fat);
+  var carbohydrates = parseFloat(details.carbohydrates);
   var category = $("#foodListPage #category").val(); //Hidden field
 
   //If no category is provided, determine it based on time of day
@@ -592,7 +602,8 @@ $("#foodListview").on("click", ".addToDiary", function(e){
   }
 
   var diaryData = {"dateTime":dateTime, "name":name, "portion":portion, "quantity":quantity,
-    "calories":calories, "category":category, "foodId":foodId, "protein":protein};
+    "calories":calories, "category":category, "foodId":foodId, "protein":protein, "fat":fat,
+    "carbohydrates":carbohydrates};
   var request = dbHandler.insert(diaryData, "diary"); //Add item to diary
 
   request.onsuccess = function(e)
@@ -606,7 +617,9 @@ $("#foodListview").on("click", ".addToDiary", function(e){
     updateProgress();
 
     //Update food item's dateTime (to show when food was last referenced)
-    var foodData = {"id":foodId, "dateTime":new Date(), "name":name, "portion":portion, "quantity":quantity, "calories":calories, "protein":protein};
+    var foodData = {"id":foodId, "dateTime":new Date(), "name":name, "portion":portion,
+    "quantity":quantity, "calories":calories, "protein":protein, "fat":fat,
+    "carbohydrates":carbohydrates};
     dbHandler.insert(foodData, "foodList");
 
     //Reset category field
@@ -669,9 +682,12 @@ function addFoodFormAction()
   var quantity = 1;
   var calories = parseFloat($('#editFoodPage #foodCalories').val());
   var protein = parseFloat($('#editFoodPage #foodProtein').val());
+  var fat = parseFloat($('#editFoodPage #foodFat').val());
+  var carbohydrates = parseFloat($('#editFoodPage #foodCarbs').val());
   var barcode = $("#editFoodForm #barcode").val(); //Barcode is hidden field
 
-  var data = {"dateTime":dateTime, "name":name, "portion":portion, "quantity":quantity, "calories":calories, "protein":protein, "barcode":barcode};
+  var data = {"dateTime":dateTime, "name":name, "portion":portion, "quantity":quantity,
+  "calories":calories, "protein":protein, "fat":fat, "carbohydrates":carbohydrates, "barcode":barcode};
 
   if (isNaN(id) == false) {data.id = id}; //Add ID for existing items
 
